@@ -1,0 +1,19 @@
+{
+  "name": "mediawiki/category-transclude",
+  "type": "mediawiki-extension",
+  "description": "Category 멤버를 가져와 반복 transclude하는 파서 기능 제공",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "A.J"
+    }
+  ],
+  "require": {
+    "php": ">=7.4.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "MediaWiki\\Extension\\CategoryTransclude\\": "src/"
+    }
+  }
+}

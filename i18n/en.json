@@ -1,0 +1,12 @@
+{
+  "@metadata": {
+    "authors": [
+      "A.J"
+    ]
+  },
+  "categorytransclude-desc": "Renders and transcludes members of a category dynamically into a page.",
+  "categorytransclude-error-invalid-category": "Error: Invalid category name \"$1\".",
+  "categorytransclude-error-empty": "The category \"$1\" has no members matching the criteria.",
+  "categorytransclude-error-recursion": "Error: Self-transclusion detected or recursive limit exceeded.",
+  "categorytransclude-error-limit-clamped": "Warning: Requested limit exceeds the maximum allowable ($1). Clamped to $2."
+}

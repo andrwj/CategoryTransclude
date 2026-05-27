@@ -1,0 +1,85 @@
+{
+  "manifest_version": 2,
+  "name": "CategoryTransclude",
+  "version": "1.0.0",
+  "author": [
+    "A.J"
+  ],
+  "url": "https://www.mediawiki.org/wiki/Extension:CategoryTransclude",
+  "descriptionmsg": "categorytransclude-desc",
+  "license-name": "MIT",
+  "type": "parserhook",
+  "requires": {
+    "MediaWiki": ">=1.45.0"
+  },
+  "MessagesDirs": {
+    "CategoryTransclude": [
+      "i18n"
+    ]
+  },
+  "ExtensionMessagesFiles": {
+    "CategoryTranscludeMagic": "magic/CategoryTransclude.magic.php"
+  },
+  "AutoloadNamespaces": {
+    "MediaWiki\\Extension\\CategoryTransclude\\": "src/"
+  },
+  "ServiceWiringFiles": [
+    "src/ServiceWiring.php"
+  ],
+  "HookHandlers": {
+    "CategoryTranscludeParserHooks": {
+      "class": "MediaWiki\\Extension\\CategoryTransclude\\Hooks\\ParserHooks",
+      "services": [
+        "CategoryTransclude.Renderer"
+      ]
+    },
+    "CategoryTranscludeInvalidationHooks": {
+      "class": "MediaWiki\\Extension\\CategoryTransclude\\Hooks\\InvalidationHooks",
+      "services": [
+        "CategoryTransclude.DependencyTracker",
+        "TitleFactory",
+        "MainConfig"
+      ]
+    },
+    "CategoryTranscludeSchemaHooks": {
+      "class": "MediaWiki\\Extension\\CategoryTransclude\\Hooks\\SchemaHooks"
+    }
+  },
+  "Hooks": {
+    "ParserFirstCallInit": "CategoryTranscludeParserHooks",
+    "CategoryAfterPageAdded": "CategoryTranscludeInvalidationHooks",
+    "CategoryAfterPageRemoved": "CategoryTranscludeInvalidationHooks",
+    "LoadExtensionSchemaUpdates": "CategoryTranscludeSchemaHooks"
+  },
+  "JobClasses": {
+    "categoryTranscludePurgeAggregate": "MediaWiki\\Extension\\CategoryTransclude\\Job\\PurgeAggregatePageJob"
+  },
+
+  "config": {
+    "CategoryTranscludeDefaultCategory": {
+      "value": "Category:KontexusNote",
+      "description": "파서 함수에 카테고리가 명시되지 않았을 때 사용할 기본 카테고리 명칭",
+      "public": false
+    },
+    "CategoryTranscludeDefaultLimit": {
+      "value": 200,
+      "description": "기본 transclude 카테고리 멤버 수 한계",
+      "public": false
+    },
+    "CategoryTranscludeMaxLimit": {
+      "value": 500,
+      "description": "최대 허용 transclude 카테고리 멤버 수 한계",
+      "public": false
+    },
+    "CategoryTranscludeDefaultHeadingLevel": {
+      "value": 2,
+      "description": "기본 heading 레벨 (0~6)",
+      "public": false
+    },
+    "CategoryTranscludeEnableDependencyTracking": {
+      "value": true,
+      "description": "집계 페이지와 카테고리 간의 의존성 추적 활성화 여부",
+      "public": false
+    }
+  }
+}

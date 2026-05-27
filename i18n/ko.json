@@ -1,0 +1,12 @@
+{
+  "@metadata": {
+    "authors": [
+      "A.J"
+    ]
+  },
+  "categorytransclude-desc": "지정된 카테고리의 문서들을 동적으로 가져와 페이지에 삽입(transclude)하여 보여줍니다.",
+  "categorytransclude-error-invalid-category": "오류: 잘못된 카테고리 이름 \"$1\"입니다.",
+  "categorytransclude-error-empty": "카테고리 \"$1\"에 조건에 맞는 멤버 문서가 없습니다.",
+  "categorytransclude-error-recursion": "오류: 자기 참조(Self-transclusion)가 감지되었거나 재귀 한계를 초과했습니다.",
+  "categorytransclude-error-limit-clamped": "경고: 요청된 출력 제한 개수가 최대 제한($1)을 초과하여 $2개로 조정되었습니다."
+}
