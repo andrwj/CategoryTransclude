@@ -85,6 +85,7 @@ php maintenance/update.php
 | **`empty-message`** | 대상 분류에 부합하는 문서가 하나도 없을 때 노출할 텍스트입니다. | 문자열 | 시스템 기본 메시지 |
 | **`show-errors`** | 파싱 도중 오류 발생 시 사용자에게 디테일한 에러 메시지를 노출할지 설정합니다. | `1` / `true`, `0` / `false` | `0` (`false`) |
 | **`debug`** | HTML 주석 형태로 렌더링 디버그 정보를 페이지 소스에 출력할지 여부입니다. | `1` / `true`, `0` / `false` | `0` (`false`) |
+| **`title-only`** | 지정한 페이지는 내용(transclusion) 없이 **제목(heading)만** 출력합니다. 항목은 `;`으로 구분하며, `%`를 와일드카드로 사용할 수 있습니다. Namespace 미지정 시 Main으로 간주합니다. `heading=0` 또는 `heading-format=none`이면 해당 페이지는 완전히 건너뜁니다. | 예: `보고서A;6D,1%;Template:T%` | 없음 |
 
 ---
 
@@ -113,6 +114,16 @@ php maintenance/update.php
   |redirect=follow
   |heading=3
   |heading-format=plain
+}}
+```
+
+### 예시 4: 특정 페이지는 제목만, 나머지는 전체 내용 출력
+`6D,1`로 시작하는 페이지와 `Template:헤더` 템플릿은 제목(링크)만 표시하고, 나머지 멤버는 전체 내용을 transclude 합니다.
+```wikitext
+{{#분류삽입:분류:보고서
+  |title-only=6D,1%;Template:헤더
+  |heading=2
+  |heading-format=link
 }}
 ```
 

@@ -136,6 +136,16 @@ class ParamParser {
 		$params->showErrors = ( ( $named['show-errors'] ?? '0' ) === '1' );
 		$params->debug = ( ( $named['debug'] ?? '0' ) === '1' );
 
+		// 12. title-only 패턴 목록 파싱
+		// 구분자: ';' (쉼표는 패턴 내 문자로 허용)
+		// 와일드카드: '%' (임의의 0개 이상의 문자와 매칭)
+		// Namespace 없으면 Main namespace로 간주
+		if ( isset( $named['title-only'] ) && $named['title-only'] !== '' ) {
+			$params->titleOnlyPatterns = array_values( array_filter(
+				array_map( 'trim', explode( ';', $named['title-only'] ) )
+			) );
+		}
+
 		return $params;
 	}
 }

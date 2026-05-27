@@ -57,6 +57,15 @@ class CategoryTranscludeParams {
 	public bool $debug;
 
 	/**
+	 * 내용 없이 제목만 표시할 페이지 패턴 목록.
+	 * 각 항목은 '%' 와일드카드를 지원하는 glob 패턴이며, ';'으로 구분하여 입력받습니다.
+	 * Namespace가 없으면 Main(NS=0)으로 간주합니다.
+	 *
+	 * @var string[]
+	 */
+	public array $titleOnlyPatterns = [];
+
+	/**
 	 * 파라미터 조합의 고유 해시값을 계산합니다.
 	 * 캐시 및 의존성 관리 테이블에서 옵션 변경 여부를 감지할 때 사용합니다.
 	 *
@@ -78,6 +87,7 @@ class CategoryTranscludeParams {
 			'fileMode' => $this->fileMode,
 			'imageWidth' => $this->imageWidth,
 			'emptyMessage' => $this->emptyMessage,
+			'titleOnlyPatterns' => $this->titleOnlyPatterns,
 		];
 		return hash( 'sha256', json_encode( $data ) );
 	}

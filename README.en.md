@@ -84,6 +84,7 @@ Or use the Korean magic word alias:
 | **`empty-message`** | Text to display if no category members match the criteria. | String | System default message |
 | **`show-errors`** | Displays detailed parser error messages to users if set to true. | `1` / `true`, `0` / `false` | `0` (`false`) |
 | **`debug`** | Appends HTML comment-based debugging info to the rendered source. | `1` / `true`, `0` / `false` | `0` (`false`) |
+| **`title-only`** | Renders only the heading (title) for matched pages, without transcluding their content. Items are separated by `;`. Use `%` as a wildcard to match any characters. Pages without a namespace prefix are assumed to be in the Main namespace. If `heading=0` or `heading-format=none`, matched pages are skipped entirely (no output). | e.g. `ReportA;6D,1%;Template:Header%` | None |
 
 ---
 
@@ -112,6 +113,16 @@ Collects up to 10 articles from the Main namespace (`namespace=0`) within "Annou
   |redirect=follow
   |heading=3
   |heading-format=plain
+}}
+```
+
+### Example 4: Show title only for specific pages
+Pages matching `6D,1%` (Main namespace) and `Template:Header` will render only their heading link, while all other category members are fully transcluded.
+```wikitext
+{{#categorytransclude:Category:Reports
+  |title-only=6D,1%;Template:Header
+  |heading=2
+  |heading-format=link
 }}
 ```
 

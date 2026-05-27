@@ -20,7 +20,10 @@ class TransclusionWikitextBuilder {
 		$wikitext = '';
 
 		foreach ( $members as $member ) {
-			if ( $member->namespace === NS_FILE ) {
+			if ( $this->isTitleOnly( $member, $params ) ) {
+				// title-only 대상: 제목만 출력 (heading=0 이거나 heading-format=none이면 완전 건너뜀)
+				$wikitext .= $this->buildTitleOnlyOutput( $member, $params );
+			} elseif ( $member->namespace === NS_FILE ) {
 				$wikitext .= $this->buildFileTransclusion( $member, $params );
 			} else {
 				$wikitext .= $this->buildPageTransclusion( $member, $params );
@@ -101,5 +104,65 @@ class TransclusionWikitextBuilder {
 		}
 
 		return $out;
+	}
+
+	/**
+	 * 멤버가 title-only 출력 대상인지 판별합니다.
+	 * titleOnlyPatterns 목록의 항목 중 하나라도 매칭되면 true를 반환합니다.
+	 *
+	 * @param CategoryMember $member
+	 * @param CategoryTranscludeParams $params
+	 * @return bool
+	 */
+	private function isTitleOnly( CategoryMember $member, CategoryTranscludeParams $params ): bool {
+		if ( empty( $params->titleOnlyPatterns ) ) {
+			return false;
+		}
+		foreach ( $params->titleOnlyPatterns as $pattern ) {
+			if ( $this->matchesTitlePattern( $member->prefixedText, $pattern ) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * '%' 와일드카드 glob 패턴으로 prefixedText와 매칭합니다.
+	 * '%'는 임의의 0개 이상의 문자와 매칭됩니다.
+	 * Namespace가 없는 패턴은 Main namespace 페이지에만 매칭됩니다.
+	 *
+	 * @param string $prefixedText 비교 대상 페이지의 prefixedText
+	 * @param string $pattern '%' 와일드카드가 포함될 수 있는 glob 패턴
+	 * @return bool
+	 */
+	private function matchesTitlePattern( string $prefixedText, string $pattern ): bool {
+		// '%' → 정규식 '.*' 으로 변환 (preg_quote 이후 '%' 이스케이프 문자 치환)
+		$regexPart = preg_quote( $pattern, '/' );
+		$regexPart = str_replace( preg_quote( '%', '/' ), '.*', $regexPart );
+		return (bool)preg_match( '/^' . $regexPart . '$/u', $prefixedText );
+	}
+
+	/**
+	 * title-only 멤버에 대한 제목 전용 wikitext를 생성합니다.
+	 * heading=0 또는 heading-format=none이면 빈 문자열을 반환합니다.
+	 *
+	 * @param CategoryMember $member
+	 * @param CategoryTranscludeParams $params
+	 * @return string
+	 */
+	private function buildTitleOnlyOutput( CategoryMember $member, CategoryTranscludeParams $params ): string {
+		// heading이 없으면 완전히 건너뜀 (아무 출력 없음)
+		if ( $params->headingLevel === 0 || $params->headingFormat === 'none' ) {
+			return '';
+		}
+
+		$titleText = $member->prefixedText;
+		$equals = str_repeat( '=', $params->headingLevel );
+
+		if ( $params->headingFormat === 'link' ) {
+			return "{$equals} [[:{$titleText}|{$titleText}]] {$equals}\n";
+		}
+		// plain 모드: 링크 없이 텍스트만 표시
+		return "{$equals} {$titleText} {$equals}\n";
 	}
 }
